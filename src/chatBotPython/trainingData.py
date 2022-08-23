@@ -20,18 +20,32 @@ class DATA:
             intents = self._load_url_data(url)
         else:
             intents = self._load_data(url)
-
         self._bot_corpus(intents)
+
+    def getWords(self):
+        return self._words
+
+    def getClasses(self):
+        return self._classes
+
+    def getDocs(self):
+        return self._documents
+
+    def getIgnoreWords(self):
+        return self._ignore_words
+
     @staticmethod
     def _load_data(path):
         data_file = open(path).read()
         return json.loads(data_file)
+
     @staticmethod
     def _load_url_data( url):
         response = urlopen(url)
         data_file = response.read()
         return json.loads(data_file)
-    def _bot_corpus(self, intents ):
+
+    def _bot_corpus(self, intents):
         nltk.download('punkt')
         nltk.download('wordnet')
         for intent in intents['intents']:
@@ -47,19 +61,27 @@ class DATA:
                     self._classes.append(intent['tag'])
 
 
-class Lemmatizer(DATA):
+class Lemmatizer:
     def __init__(self, url=None):
-        super(DATA, self).__init__(url)
+
         # create an object of WordNetLemmatizer
         self._lemmatizer = WordNetLemmatizer()
+        data = DATA(url)
+        self._words = data.getWords()
+        self._classes = data.getClasses()
+        self._documents = data.getDocs()
+        self._ignore_words = data.getIgnoreWords()
     def _remove_duplicated_words(self):
         words = [self._lemmatizer.lemmatize(w.lower()) for w in self._words if w not in self._ignore_words]
         return sorted(list(set(words)))
+
     def _get_classes(self):
         return sorted(list(set(self._classes)))
+
     def write(self):
         pickle.dump(self._words, open('words.pkl', 'wb'))
         pickle.dump(self._classes, open('classes.pkl', 'wb'))
+
 
 class TrainingData(Lemmatizer):
 

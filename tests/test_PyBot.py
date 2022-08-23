@@ -1,7 +1,12 @@
 
 from chatBotPython.chatBot import LOAD_MODEL
-
+from chatBotPython.CNN_Model import CNN
+import os
+path = os.path.dirname(os.path.abspath(__file__))
 def start_chat():
+
+    cnn = CNN()
+    cnn.write_results(filename=path + "/chatbot.h5")
     response = LOAD_MODEL()
     print("Bot: This is Sophie! Your Personal Assistant.\n\n")
     while True:
