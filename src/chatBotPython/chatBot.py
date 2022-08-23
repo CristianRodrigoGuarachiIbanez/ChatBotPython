@@ -2,7 +2,7 @@ import json, pickle, random
 import nltk
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
-from numpy as np
+import numpy as np
 
 class LOAD_MODEL:
     def __init__(self):
@@ -69,22 +69,3 @@ class LOAD_MODEL:
         ints = self._predict_class(text, self._model)
         res = self._getResponse(ints, self._intents)
         return res
-
-def start_chat():
-    response = LOAD_MODEL()
-    print("Bot: This is Sophie! Your Personal Assistant.\n\n")
-    while True:
-        inp = str(input()).lower()
-        if inp.lower()=="end":
-            break
-        if inp.lower()== '' or inp.lower()== '*':
-            print('Please re-phrase your query!')
-            print("-"*50)
-        else:
-            print(f"Bot: {response.chatbot_response(inp)}"+'\n')
-            print("-"*50)
-
-
-if (__name__ == "__main__"):
-
-    start_chat()
